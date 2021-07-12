@@ -32,7 +32,7 @@ def app():
         # let's user choose number of books they'd like to rate
         st.sidebar.write('---')
         st.sidebar.title('Rate books below')
-        j = st.sidebar.number_input('How many books would you like to rate?', value=1, min_value=1, max_value=10, step=1)
+        j = st.sidebar.number_input('How many books would you like to rate?', value=1, min_value=1, max_value=50, step=1)
         st.sidebar.write('---')
 
         # Initialize keys for each potential selectbox
