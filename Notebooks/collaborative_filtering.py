@@ -6,11 +6,8 @@ from math import sqrt
 import random
 import streamlit as st
 
-ratings_file = '/Users/gregoryolson/Documents/Data Science CT/Capstone/Capstone_Books/Data/ratings_cleaned.csv'
-books_file = '/Users/gregoryolson/Documents/Data Science CT/Capstone/Capstone_Books/Data/books_cleaned.csv'
-
-ratings = pd.read_csv(ratings_file)
-books = pd.read_csv(books_file)
+ratings = pd.read_csv('../Data/ratings_cleaned.csv')
+books = pd.read_csv('../Data/books_cleaned.csv')
 
 st.set_page_config(initial_sidebar_state="expanded")
 
@@ -313,6 +310,4 @@ def app():
             with col2:
                 st.write(str(i+1))
             with col3:
-                st.write(recs.values[i][1], '-', str(recs.values[i][2])) #was 0 1
-
-# to create pivot table, look at this example https://medium.com/analytics-vidhya/simple-movie-recommender-system-with-correlation-coefficient-with-python-e6cb31dae01e
+                st.write(recs.values[i][1], '-', str(recs.values[i][2]))
