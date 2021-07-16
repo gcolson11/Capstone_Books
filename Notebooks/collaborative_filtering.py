@@ -1,4 +1,4 @@
-# Code for the collaborative filtering section of my book recommendation system
+# Code for building the book recommendation system and Web App
 
 import pandas as pd
 import numpy as np
@@ -6,8 +6,8 @@ from math import sqrt
 import random
 import streamlit as st
 
-ratings = pd.read_csv('../Data/ratings_cleaned.csv')
-books = pd.read_csv('../Data/books_cleaned.csv')
+ratings = pd.read_csv('../Capstone_Books/Data/ratings_cleaned.csv')
+books = pd.read_csv('../Capstone_Books/Data/books_cleaned.csv')
 
 st.set_page_config(initial_sidebar_state="expanded")
 
@@ -103,12 +103,13 @@ def app():
             self.user_input = user_input
             self.books_cf = None
             self.input = None
+            self.books_cf_new = None
+            self.genre_list = None
             self.user_subset_group = None
             self.pearson_corr_dict = None
             self.pearson_df = None
             self.top_users_rating = None
             self.recommendation_df = None
-            self.rec_df_head = None
             self.recommendation = None
 
         # make dataframe with only essential columns, convert year column to type int and rename
@@ -218,20 +219,6 @@ def app():
             self.recommendation_df['id'] = top_users_sum.index
             self.recommendation_df = self.recommendation_df.sort_values(by='weighted average rec score', ascending=False)
             return self.recommendation_df
-
-        # loop that only returns rows with genre in common
-        def shared_genres(self):
-            for index, row in self.remove_input_books().iterrows():
-                if (row['genre1'] not in self.add_genres()) and (row['genre2'] not in self.add_genres()) and (row['genre3'] not in self.add_genres()):
-                    self.remove_input_books().drop(index, inplace=True)
-
-            books_cf.shape
-
-            # loop that drops rows from recommendation_df without shared genres
-            shared_ids = self.remove_input_books()['id'].tolist()
-            for index, row in self.rec_df().iterrows():
-                if row['id'] not in shared_ids:
-                    self.rec_df().drop(index, inplace=True)
 
         # drop id column, return final recommendation
         def recommendations(self):
