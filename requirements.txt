@@ -1,5 +1,5 @@
 altair==4.1.0
-anaconda-client==1.7.2
+anaconda-client==1.2.2
 anaconda-navigator==1.10.0
 anyio==2.2.0
 appnope==0.1.0
