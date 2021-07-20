@@ -6,8 +6,8 @@ from math import sqrt
 import random
 import streamlit as st
 
-ratings = pd.read_csv('../Capstone_Books/Data/ratings_cleaned.csv')
-books = pd.read_csv('../Capstone_Books/Data/books_cleaned.csv')
+ratings = pd.read_csv('../Data/ratings_cleaned.csv')
+books = pd.read_csv('../Data/books_cleaned.csv')
 
 st.set_page_config(initial_sidebar_state="expanded")
 
@@ -33,8 +33,8 @@ def app():
         j = st.sidebar.number_input('How many books would you like to rate?', value=3, min_value=1, max_value=50, step=1)
         st.sidebar.write('---')
 
-        # Initialize keys for each potential selectbox
-        keys1, keys2 = ['aa','ab','ac','ad','ae','af','ag','ah','ai','aj'], ['ba','bb','bc','bd','be','bf','bg','bh','bi','bj']
+        # Initialize first keys for selectbox
+        keys1, keys2 = 0, 1
 
         # first element of dropdown list is a placeholder value '-'
         title_list = ['-'] + books['title'].tolist()
@@ -45,14 +45,16 @@ def app():
 
             # user selects book title
             words = 'Select book ' + str(i+1)
-            book_choice = st.sidebar.selectbox(words, title_list, key=keys1[i])
+            book_choice = st.sidebar.selectbox(words, title_list, key=keys1)
+            keys1 += 2
             if book_choice == '-':
                 pass
             else:
                 b.append(book_choice)
 
             # user selects rating
-            rating_choice = st.sidebar.slider('Rating', min_value=0, max_value=5, value=0, key=keys2[i])
+            rating_choice = st.sidebar.slider('Rating', min_value=0, max_value=5, value=0, key=keys2)
+            keys2 += 2
             st.sidebar.markdown('---')
             if rating_choice == 0:
                 pass
