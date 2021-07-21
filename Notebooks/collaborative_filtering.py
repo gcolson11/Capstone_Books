@@ -105,7 +105,7 @@ def app():
             self.user_input = user_input
             self.books_cf = None
             self.input = None
-            self.books_cf_new = None
+            self.new_books_cf = None
             self.genre_list = None
             self.user_subset_group = None
             self.pearson_corr_dict = None
@@ -132,8 +132,8 @@ def app():
         # remove input books from books_cf
         def remove_input_books(self):
             input_book_list = self.user_input_filter()['id'].tolist()
-            self.books_cf_new = self.books_cfdf()[~self.books_cfdf()['id'].isin(input_book_list)]
-            return self.books_cf_new
+            self.new_books_cf = self.books_cfdf()[~self.books_cfdf()['id'].isin(input_book_list)]
+            return self.new_books_cf
 
         # create a list of genres
         def add_genres(self):
@@ -247,8 +247,10 @@ def app():
 
             else:
                 self.recommendation = self.remove_input_books().loc[self.remove_input_books()['id'].isin(self.rec_df()['id'].head(10).tolist())]
-                self.recommendation = self.recommendation.drop(['genre1', 'genre2', 'genre3'], axis=1)
+                self.recommendation = self.recommendation.sort_values(by=['scores', 'id'], ascending=[False, True])
+                self.recommendation = self.recommendation.drop(['genre1', 'genre2', 'genre3', 'scores'], axis=1)
                 #self.recommendation = self.recommendation.reset_index(drop=True)
+                self.recommendation = self.recommendation.head(10)
 
             return self.recommendation
 
@@ -291,7 +293,7 @@ def app():
         recs = cf.recommendations()
 
         # display book cover, recommendation ranking, title and author of book recommendations
-        for i in range(len(cf.recommendations())):
+        for i in range(len(recs)):
 
             col1, mid1, col2, mid2, col3 = st.beta_columns([1,2,1,1,20])
             with col1:
