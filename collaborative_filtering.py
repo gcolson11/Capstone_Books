@@ -6,8 +6,8 @@ from math import sqrt
 import random
 import streamlit as st
 
-ratings_file = '/Users/gregoryolson/Documents/Data Science CT/Capstone/Capstone_Books/Data/ratings_cleaned.csv'
-books_file = '/Users/gregoryolson/Documents/Data Science CT/Capstone/Capstone_Books/Data/books_cleaned.csv'
+ratings_file = 'Data/ratings_cleaned.csv'
+books_file = 'Data/books_cleaned.csv'
 
 ratings = pd.read_csv(ratings_file)
 books = pd.read_csv(books_file)
