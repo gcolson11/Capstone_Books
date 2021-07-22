@@ -6,8 +6,11 @@ from math import sqrt
 import random
 import streamlit as st
 
-ratings = pd.read_csv('../Data/ratings_cleaned.csv')
-books = pd.read_csv('../Data/books_cleaned.csv')
+ratings_file = '/Users/gregoryolson/Documents/Data Science CT/Capstone/Capstone_Books/Data/ratings_cleaned.csv'
+books_file = '/Users/gregoryolson/Documents/Data Science CT/Capstone/Capstone_Books/Data/books_cleaned.csv'
+
+ratings = pd.read_csv(ratings_file)
+books = pd.read_csv(books_file)
 
 st.set_page_config(initial_sidebar_state="expanded")
 
@@ -239,17 +242,14 @@ def app():
                     scores.append(count)
                     count = 0
 
-                self.recommendation['scores'] = scores
-                self.recommendation = self.recommendation.sort_values(by=['scores', 'id'], ascending=[False, True])
-                self.recommendation = self.recommendation.drop(['genre1', 'genre2', 'genre3', 'scores'], axis=1)
-                #self.recommendation = self.recommendation.reset_index(drop=True)
+                self.recommendation['genre_score'] = scores
+                self.recommendation = self.recommendation.sort_values(by=['genre_score', 'id'], ascending=[False, True])
+                self.recommendation = self.recommendation.drop(['genre1', 'genre2', 'genre3', 'genre_score'], axis=1)
                 self.recommendation = self.recommendation.head(10)
 
             else:
                 self.recommendation = self.remove_input_books().loc[self.remove_input_books()['id'].isin(self.rec_df()['id'].head(10).tolist())]
-                self.recommendation = self.recommendation.sort_values(by=['scores', 'id'], ascending=[False, True])
-                self.recommendation = self.recommendation.drop(['genre1', 'genre2', 'genre3', 'scores'], axis=1)
-                #self.recommendation = self.recommendation.reset_index(drop=True)
+                self.recommendation = self.recommendation.drop(['genre1', 'genre2', 'genre3'], axis=1)
                 self.recommendation = self.recommendation.head(10)
 
             return self.recommendation
