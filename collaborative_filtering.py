@@ -32,8 +32,6 @@ class Collaborative_Filtering:
         self.recommendation_df = None
         self.recommendation = None
 
-    ##--------------------------------------------------------------------------
-
     # make dataframe with only essential columns, convert year column to type int and rename
     def books_cfdf(self):
         self.books_cf = self.books[['id', 'title', 'authors', 'original_publication_year', 'genre1', 'genre2', 'genre3']]
@@ -48,8 +46,6 @@ class Collaborative_Filtering:
         self.input = pd.merge(input_id, self.user_input)
         self.input = self.input.drop('year', axis=1).reset_index(drop=True)
         return self.input
-
-    ##--------------------------------------------------------------------------
 
     # remove input books from books_cf
     def remove_input_books(self):
@@ -70,6 +66,19 @@ class Collaborative_Filtering:
                 if a not in self.genre_list:
                     self.genre_list.append(a)
         return self.genre_list
+
+    ##NEW STEP - make average rating for each genre among user inputs
+    def genre_ratings(self):
+        avg_genre_rating = []
+        ag = self.add_genres()
+        for item in ag:
+            uifs = self.user_input_filter()
+            temp_gdf = uifs.loc[(uifs['genre1'] == item) | (uifs['genre2'] == item) | (uifs['genre3'] == item)]
+            c = temp_gdf['rating'].mean()
+            avg_genre_rating.append(c)
+
+        self.genre_rating_dict = {ag[i]: avg_genre_rating[i] for i in range(len(ag))}
+        return self.genre_rating_dict
 
     # filter users that have read books that the input has also read
     def user_subset(self):
@@ -154,13 +163,14 @@ class Collaborative_Filtering:
             count = 0
             scores = []
             genre_df = self.add_genres()
+            gr = self.genre_ratings()
             for index, row in self.recommendation.iterrows():
                 if row['genre1'] in genre_df:
-                    count += 5
+                    count += 5 * (gr[row['genre1']] - 3)
                 if row['genre2'] in genre_df:
-                    count += 3
+                    count += 3 * (gr[row['genre2']] - 3)
                 if row['genre3'] in genre_df:
-                    count += 1
+                    count += 1 * (gr[row['genre3']] - 3)
                 scores.append(count)
                 count = 0
 
@@ -176,8 +186,6 @@ class Collaborative_Filtering:
 
         return self.recommendation
 
-    ##--------------------------------------------------------------------------
-
     # method that returns each url of the user inputted books
     def book_images(self):
         input_df = pd.DataFrame.from_dict(self.user_input)
@@ -192,7 +200,6 @@ class Collaborative_Filtering:
         image_list = input_df['image_url'].tolist()
         return image_list
 
-##--------------------------------------------------------------------------
 
 # Make Web App
 def app():
@@ -284,8 +291,7 @@ def app():
         st.subheader("We rated 5 books")
         st.write(' ')
 
-    # Finish Web App -----------------------------------------------------------
-
+    # continue with making recommendation and displaying in app
     if button == True:
         # instantiate Collaborative_Filtering class
         cf = Collaborative_Filtering(books, ratings, user_input)
