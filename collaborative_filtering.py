@@ -3,6 +3,7 @@
 import pandas as pd
 import numpy as np
 from math import sqrt
+from statistics import pstdev
 import random
 import streamlit as st
 
@@ -26,7 +27,7 @@ class Collaborative_Filtering:
         self.new_books_cf = None
         self.genre_list = None
         self.user_subset_group = None
-        self.pearson_corr_dict = None
+        self.sim_dict = None
         self.pearson_df = None
         self.top_users_rating = None
         self.recommendation_df = None
@@ -34,7 +35,7 @@ class Collaborative_Filtering:
 
     # make dataframe with only essential columns, convert year column to type int and rename
     def books_cfdf(self):
-        self.books_cf = self.books[['id', 'title', 'authors', 'original_publication_year', 'genre1', 'genre2', 'genre3']]
+        self.books_cf = self.books[['id', 'title', 'authors', 'original_publication_year', 'genre1', 'genre2', 'genre3', 'small_image_url']]
         self.books_cf['original_publication_year'] = self.books_cf['original_publication_year'].astype(int)
         self.books_cf = self.books_cf.rename(columns={'original_publication_year': 'year'})
         self.ratings = self.ratings.rename(columns={'book_id': 'id'})
@@ -90,9 +91,10 @@ class Collaborative_Filtering:
         self.user_subset_group = self.user_subset_group[0:100]
         return self.user_subset_group
 
-    # calculate the pearson correlations
-    def pearson_correlation(self):
-        self.pearson_corr_dict = {}
+    # calculate the pearson correlation or cosine similarity
+    def correlation(self):
+        self.sim_dict = {}
+        std = pstdev(self.user_input_filter()['rating'].tolist())
 
         # for loop that calculates Pearson correlation and stores values in above dict
         for name, group in self.user_subset():
@@ -108,27 +110,33 @@ class Collaborative_Filtering:
             rating_list = temp_df['rating'].tolist()
             group_list = group['rating'].tolist()
 
-            # calculate each component of Pearson correlation
-            Sxx = sum([i**2 for i in rating_list]) - (sum(rating_list)**2 / float(num_ratings))
-            Syy = sum([i**2 for i in group_list]) - (sum(group_list)**2 / float(num_ratings))
-            Sxy = sum([i*j for i, j in zip(rating_list, group_list)]) \
-                - (sum(rating_list) * sum(group_list) / num_ratings)
+            if std == 0:
+                # calculate cosine similarity
+                cos_sim = np.dot(rating_list, group_list)/(np.linalg.norm(rating_list)*np.linalg.norm(group_list))
+                self.sim_dict[name] = cos_sim
 
-            # calculate Pearson corr if Sxx and Syy not 0, else set = 0
-            if Sxx != 0 and Syy != 0:
-                self.pearson_corr_dict[name] = Sxy/sqrt(Sxx*Syy)
             else:
-                self.pearson_corr_dict[name] = 0
+                # calculate each component of Pearson correlation
+                Sxx = sum([i**2 for i in rating_list]) - (sum(rating_list)**2 / float(num_ratings))
+                Syy = sum([i**2 for i in group_list]) - (sum(group_list)**2 / float(num_ratings))
+                Sxy = sum([i*j for i, j in zip(rating_list, group_list)]) \
+                    - (sum(rating_list) * sum(group_list) / num_ratings)
 
-        return self.pearson_corr_dict
+                # calculate Pearson corr if Sxx and Syy not 0, else set = 0
+                if Sxx != 0 and Syy != 0:
+                    self.sim_dict[name] = Sxy/sqrt(Sxx*Syy)
+                else:
+                    self.sim_dict[name] = 0
+
+        return self.sim_dict
 
     # convert dictionary to dataframe
     def to_df(self):
-        self.pearson_df = pd.DataFrame.from_dict(self.pearson_correlation(), orient='index')
-        self.pearson_df.columns = ['similarity_index']
-        self.pearson_df['user_id'] = self.pearson_df.index
-        self.pearson_df.index = range(len(self.pearson_df))
-        return self.pearson_df
+        self.sim_df = pd.DataFrame.from_dict(self.correlation(), orient='index')
+        self.sim_df.columns = ['similarity_index']
+        self.sim_df['user_id'] = self.sim_df.index
+        self.sim_df.index = range(len(self.sim_df))
+        return self.sim_df
 
     # get top 50 similar users, merge top_users with ratings, then multiply user similarity by user ratings
     def top_users(self):
@@ -194,11 +202,13 @@ class Collaborative_Filtering:
         return image_list
 
     # method that returns each url of the recommended books
-    def rec_images(self):
-        input_df = pd.DataFrame.from_dict(self.user_input)
-        input_df = self.books[self.books['id'].isin(self.recommendations()['id'])]
-        image_list = input_df['image_url'].tolist()
-        return image_list
+    #def rec_images(self):
+        #recims = self.recommendations()
+        #input_df = pd.DataFrame.from_dict(self.user_input)
+        #input_df = self.books[self.books['id'].isin(recims['id'])]
+        ##input_df = input_df.sort_values(by='id', ascending=True)
+        #image_list = input_df['image_url'].tolist()
+        #return image_list
 
 
 # Make Web App
@@ -305,7 +315,7 @@ def app():
             with col1:
                 st.image(bi[i], width=60)
             with col2:
-                st.write(str(uif.values[i][6]))
+                st.write(str(uif.values[i][7])) #6
             with col3:
                 st.write(uif.values[i][1], '-', uif.values[i][2])
 
@@ -313,7 +323,7 @@ def app():
         st.subheader('Based on the selected books here are some recommendations:')
         st.write(' ')
 
-        images = cf.rec_images()
+        #images = cf.rec_images()
         recs = cf.recommendations()
 
         # display book cover, recommendation ranking, title and author of book recommendations
@@ -321,7 +331,7 @@ def app():
 
             col1, mid1, col2, mid2, col3 = st.beta_columns([1,2,1,1,20])
             with col1:
-                st.image(images[i], width=60)
+                st.image(recs.values[i][-1], width=60)   #images[i]
             with col2:
                 st.write(str(i+1))
             with col3:
