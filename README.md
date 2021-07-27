@@ -11,6 +11,7 @@ In this project, I created a book recommendation system in a Streamlit Web App. 
 # References
 
 1. Reports
+- [Final Report](https://docs.google.com/document/d/1asme3GKqapHFl8JE512JGbJ0jwMojwtiZnKs7wvf7W0/edit)
 2. Project Files 
 - [Data Wrangling & EDA](https://github.com/gcolson11/Capstone_Books/blob/main/Data_Wrangling_and_EDA.ipynb)
 - [Modeling](https://github.com/gcolson11/Capstone_Books/blob/main/Pre-processing%20and%20Model.ipynb)
