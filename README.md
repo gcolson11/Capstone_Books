@@ -1,6 +1,6 @@
 # Ready-books Recommender
 
-In this project, I created a book recommendation system in a Streamlit Web App. I used a hybrid approach in which I used user-based collaborative filtering with item-based genre similarity metrics. The metric I used to calculate user similarity was Pearson Correlation. The data for this project was sourced from goodbooks-10k dataset on Kaggle. I used the ratings, books, and book tags datasets. 
+In this project, I created a book recommendation system in a Streamlit Web App. I used user-based collaborative filtering with a layer of content-based genre similarity metrics to get the final recommendations. The metrics I used to calculate user similarity were Pearson Correlation and Cosine similarity. The data for this project was sourced from goodbooks-10k dataset on Kaggle. I used the ratings, books, and book tags datasets. 
 
 [Data](https://www.kaggle.com/zygmunt/goodbooks-10k)
 
