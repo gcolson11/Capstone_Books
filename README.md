@@ -1,12 +1,14 @@
 # Ready-books Recommender
 
-# App Demo [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/gcolson11/capstone_books/main/app.py)
-
-https://www.youtube.com/watch?v=quMsPgEZXDA 
-
 In this project, I created a book recommendation system in a Streamlit Web App. I used a hybrid approach in which I used user-based collaborative filtering with item-based genre similarity metrics. The metric I used to calculate user similarity was Pearson Correlation. The data for this project was sourced from goodbooks-10k dataset on Kaggle. I used the ratings, books, and book tags datasets. 
 
 [Data](https://www.kaggle.com/zygmunt/goodbooks-10k)
+
+# App Demo [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/gcolson11/capstone_books/main/app.py)
+
+![Video](https://www.youtube.com/watch?v=quMsPgEZXDA) 
+
+![Photo](https://github.com/gcolson11/Capstone_Books/blob/main/app_photo.png)
 
 # References
 
