@@ -6,7 +6,7 @@ In this project, I created a book recommendation system in a Streamlit Web App. 
 
 # App Demo [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/gcolson11/capstone_books/main/app.py)
 
-![Video](https://www.youtube.com/watch?v=quMsPgEZXDA) 
+https://www.youtube.com/watch?v=quMsPgEZXDA
 
 ![Photo](https://github.com/gcolson11/Capstone_Books/blob/main/app_photo.png)
 
