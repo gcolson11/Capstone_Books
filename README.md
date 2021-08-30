@@ -19,4 +19,4 @@ https://www.youtube.com/watch?v=quMsPgEZXDA
 - [Data Wrangling & EDA](https://github.com/gcolson11/Capstone_Books/blob/main/Data_Wrangling_and_EDA.ipynb)
 - [Modeling - Jupyter Notebook](https://github.com/gcolson11/Capstone_Books/blob/main/Pre-processing%20and%20Model.ipynb)
 - [Modeling - collaborative_filtering.py](https://github.com/gcolson11/Capstone_Books/blob/main/collaborative_filtering.py)
-- [Code for App](https://github.com/gcolson11/Capstone_Books/blob/main/app.py)
+- [Code for App](https://github.com/gcolson11/Capstone_Books/blob/main/app.py)\\
