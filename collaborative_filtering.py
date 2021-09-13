@@ -9,6 +9,8 @@ import streamlit as st
 
 ratings_file = 'Data/ratings_cleaned.csv'
 books_file = 'Data/books_cleaned.csv'
+#ratings_file = '/Users/gregoryolson/Documents/Data Science CT/Capstone/Capstone_Books/Data/ratings_cleaned.csv'
+#books_file = '/Users/gregoryolson/Documents/Data Science CT/Capstone/Capstone_Books/Data/books_cleaned.csv'
 
 ratings = pd.read_csv(ratings_file)
 books = pd.read_csv(books_file)
@@ -201,23 +203,13 @@ class Collaborative_Filtering:
         image_list = input_df['image_url'].tolist()
         return image_list
 
-    # method that returns each url of the recommended books
-    #def rec_images(self):
-        #recims = self.recommendations()
-        #input_df = pd.DataFrame.from_dict(self.user_input)
-        #input_df = self.books[self.books['id'].isin(recims['id'])]
-        ##input_df = input_df.sort_values(by='id', ascending=True)
-        #image_list = input_df['image_url'].tolist()
-        #return image_list
-
-
 # Make Web App
 def app():
 
     # Write in title and first instructions on Web App
     st.title('Read-y Books Recommender')
     st.write("Welcome! To receive book recommendations, fill out the information in the left sidebar. \
-              When you are finished rating, the page will refresh and give you your recommendations. \
+              When you are finished rating, click the buttom that appears to receive your recommendations. \
               You can also select the option below to have a recommendation randomly generated.")
     choice = st.radio(' ', ['Input your own book ratings', 'Or randomly generate a recommendation'])
 
